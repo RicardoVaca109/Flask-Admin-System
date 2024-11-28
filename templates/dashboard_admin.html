@@ -2,8 +2,8 @@
 
 {% block body%}
 <div class="container">
-    <h1> Welcome, {{username}}! </h1>
-    <p>Bienvenido a tu Dashboard</p>
+    <h1> Welcome, {{session['username']}}!  </h1>
+    <p>Bienvenido a tu Dashboard {{session['role_name']}} </p>
     <a href=" {{url_for('auth_controller.logout')}} " class="btn btn-logout">Logout</a>
     <a href=" {{url_for('dashboard_controller.manage_users')}} " class="btn btn-manage-users">Administrar Usuarios</a>
 </div>
