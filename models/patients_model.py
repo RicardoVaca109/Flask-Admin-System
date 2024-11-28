@@ -10,5 +10,5 @@ class Patient(db.Model):
     contacto = db.Column(db.String(100))
     fecha_registro = db.Column(db.Date)
 
-    # # Relación con PacienteEnfermedad
+    # Relación con Tabla PacienteEnfermedad (patientenfermedad_model.py)
     enfermedades = db.relationship('PacienteEnfermedad', back_populates='paciente')
