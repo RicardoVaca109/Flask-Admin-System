@@ -13,6 +13,7 @@ from database import db
 from controllers.auth_controller import auth_controller
 from controllers.dashboard_controller import dashboard_controller
 from controllers.main_controller import main_controller
+from controllers.patients_controller import patients_controller
 from models.users_model import User
 
 
@@ -22,11 +23,18 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = "DysonSlMilo2003"
 
-# Configurar SQLAlchemy
+# # Configurar SQLAlchemy para base de datos Railway
+# app.config["SQLALCHEMY_DATABASE_URI"] = (
+#     f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
+#     f"@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+# )
+
+#Configurar SQLAlchemy para base de datos local
 app.config["SQLALCHEMY_DATABASE_URI"] = (
     f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
-    f"@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+    f"@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}"
 )
+
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Inicializar la base de datos con la aplicación
@@ -44,6 +52,7 @@ with app.app_context():
 app.register_blueprint(main_controller)
 app.register_blueprint(auth_controller)
 app.register_blueprint(dashboard_controller)
+app.register_blueprint(patients_controller)
 
 if __name__ == "__main__":
     app.run(debug=True)
