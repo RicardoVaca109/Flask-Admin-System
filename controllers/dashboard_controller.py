@@ -12,9 +12,13 @@ def dashboard():
             return render_template("dashboard_admin.html", username = session['username'])
         elif session.get("role_id") == 2: #Suponiendo que el rol es de usuario
             return render_template("dashboard_user.html", username = session['username'])
+        elif session.get("role_id") == 3: #Suponiendo que el rol es de inventario
+            return render_template("dashboard_invent.html", username = session['username'])
+        elif session.get("role_id") == 4: #Suponiendo que el rol es de enfermeria
+            return render_template("dashboard_nurse.html", username = session['username'])
     return redirect(url_for('main_controller.index'))
 
-@dashboard_controller.route("/manage-users")
+@dashboard_controller.route("/manage-users") # Manejo de Usuarios
 def manage_users():
     if "username" in session and session ["role_id"] == 1:
         users = User.query.all()
@@ -24,7 +28,7 @@ def manage_users():
 @dashboard_controller.route("/manage-users/create", methods = ['GET','POST'])
 def create_user():
     if "username" in session and session ["role_id"] != 1:
-        flash("No tienes permiso para realizar la sigueinte accion")
+        flash("No tienes permiso para realizar la siguiente accion")
         return redirect(url_for("dashboard_controller.dashboard"))
     if request.method == "POST":
         username = request.form.get("username")
