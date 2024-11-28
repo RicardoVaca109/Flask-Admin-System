@@ -1,0 +1,12 @@
+{% extends "base.html" %} 
+{% block body %}
+<div class="container">
+  <h1>Welcome, {{session['username']}}! </h1>
+  <p>Bienvenido a tu Dashboard de {{session['role_name']}} </p>
+  <a href="{{ url_for('auth_controller.logout') }}" class="btn btn-logout"
+    >Logout</a
+  >
+  <!-- Botón adicional para usuarios -->
+  <a href="#" class="btn btn-extra">Administrar Inventario</a>
+</div>
+{% endblock %}
