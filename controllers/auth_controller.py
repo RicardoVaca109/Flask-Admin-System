@@ -18,6 +18,7 @@ def login():
     if user and user.check_password(password):
         session['username'] = usuario
         session['role_id'] = user.role_id
+        session['role_name'] = user.role.role_name
         return redirect(url_for('dashboard_controller.dashboard'))
     else:
         return render_template("index.html", error="Usuario, email o contraseña incorrectos")
@@ -59,24 +60,5 @@ def register():
 def logout():
     session.pop('username', None)
     session.pop('role_id', None)
+    session.pop('role_name', None)
     return redirect(url_for('main_controller.index'))     
-
-# antigua Ruta Registro
-# Ruta Registro
-# @auth_controller.route("/register", methods=['POST'])
-# def register():
-#     username = request.form['username']
-#     password = request.form['password']
-#     email = request.form['email']
-#     existing_user = User.query.filter((User.username == username) | (User.email == email)).first()
-#     if existing_user:
-#         return render_template("index.html", error="Usuario ya esta iniciado sesion!")
-#     else:
-#         new_user = User(username = username, role_id = 1)
-#         new_user.set_password(password)
-#         new_user.set_email(email)
-#         db.session.add(new_user)
-#         db.session.commit()
-#         session['username'] = username
-#         session['role_id'] = new_user.role_id
-#         return redirect(url_for('dashboard_controller.dashboard'))
