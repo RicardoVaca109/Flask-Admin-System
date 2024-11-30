@@ -14,6 +14,7 @@ from controllers.auth_controller import auth_controller
 from controllers.dashboard_controller import dashboard_controller
 from controllers.main_controller import main_controller
 from controllers.patients_controller import patients_controller
+from controllers.inventory_controller import inventory_controller
 from models.users_model import User
 
 
@@ -53,6 +54,7 @@ app.register_blueprint(main_controller)
 app.register_blueprint(auth_controller)
 app.register_blueprint(dashboard_controller)
 app.register_blueprint(patients_controller)
+app.register_blueprint(inventory_controller)
 
 if __name__ == "__main__":
     app.run(debug=True)
