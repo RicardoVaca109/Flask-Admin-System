@@ -1,7 +1,7 @@
 # users_model.py #
 from database import db
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from email_validator import validate_email, EmailNotValidError
 class User(db.Model):
     __tablename__ = 'users'
     
@@ -18,4 +18,8 @@ class User(db.Model):
         return check_password_hash(self.contrasenia, password)
     
     def set_email(self, email):
-        self.email = email
+        try:
+            valid_email = validate_email(email).email
+            self.email = valid_email
+        except EmailNotValidError as e:
+            raise ValueError(f"Email inválido: {str(e)}")
