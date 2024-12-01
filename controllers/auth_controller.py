@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, url_for, redirect, session, request
-from models.users_model import User
 from models.role_model import Role
+from models.users_model import User
 from database import db
 
 auth_controller = Blueprint("auth_controller", __name__)
@@ -45,9 +45,13 @@ def register():
      # Crear nuevo usuario y asignarle el rol adecuado
     new_user = User(username=username, role_id=role_id)
     new_user.set_password(password)
-    new_user.set_email(email)
-    db.session.add(new_user)
-    db.session.commit()
+    try:
+        new_user.set_email(email)
+        db.session.add(new_user)
+        db.session.commit()
+    except ValueError as e:
+        # Capturar error de email inválido y mostrarlo en pantalla
+        return render_template("index.html", error="Dominio de correo no válido")
     
     # Iniciar sesión automáticamente para el nuevo usuario registrado
     session['username'] = username
@@ -61,4 +65,4 @@ def logout():
     session.pop('username', None)
     session.pop('role_id', None)
     session.pop('role_name', None)
-    return redirect(url_for('main_controller.index'))     
+    return redirect(url_for('main_controller.index'))
