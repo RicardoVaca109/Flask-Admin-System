@@ -30,17 +30,23 @@ def create_user():
     if "username" in session and session ["role_id"] != 1:
         flash("No tienes permiso para realizar la siguiente accion")
         return redirect(url_for("dashboard_controller.dashboard"))
+    
     if request.method == "POST":
         username = request.form.get("username")
         email = request.form.get("email")
         password = request.form.get("password")
         role_id = request.form.get("role_id")
         
-        #Creacion del nuevo usuario
-        new_user = User(username = username, email = email, role_id = role_id)
-        new_user.set_password(password) # establecer la contraseña encriptada
+        existing_user = User.query.filter((User.username == username) | (User.email == email)).first()
+        if existing_user:
+            flash("El usuario o el email ya están registrados.", "danger")
+            return redirect(url_for("dashboard_controller.manage_users"))
         
+        #Creacion del nuevo usuario
+        new_user = User(username = username, role_id = role_id)
+        new_user.set_password(password) # establecer la contraseña encriptada
         try:
+            new_user.set_email(email)
             db.session.add(new_user)
             db.session.commit()
             flash("Usuario nuevo creado")
@@ -61,9 +67,16 @@ def edit_user(user_id):
     user = User.query.get_or_404(user_id)
     if request.method == "POST":
         user.username = request.form.get("username")
-        user.email = request.form.get("email")
+        email = request.form.get("email")
         user.role_id = request.form.get("role_id")
         password = request.form.get("password")
+        
+        try:
+            user.set_email(email)
+        except ValueError as e:
+            flash(str(e), "danger")
+            return redirect(url_for("dashboard_controller.manage_users"))
+
         if password:
             user.set_password(password)
         try:
