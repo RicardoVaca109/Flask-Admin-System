@@ -4,7 +4,7 @@ from database import db
 #Al importar los modelos de las tablas hacerlos por orden para que funcionen al 100%
 from models.patients_model import Patient
 from models.enfermedad_model import Enfermedad
-from models.patientenfermedad_model import PacienteEnfermedad
+from models.patientenfermedad_model import PatienteEnfermedad
 
 patients_controller = Blueprint("patients_controller", __name__)
 
@@ -12,6 +12,6 @@ patients_controller = Blueprint("patients_controller", __name__)
 def manage_patients():
     if "username" in session and session ["role_id"] == 4:
         #pacientes = Patient.query.all()
-        pacientes = Patient.query.options(joinedload(Patient.enfermedades).joinedload(PacienteEnfermedad.enfermedad))
+        pacientes = Patient.query.options(joinedload(Patient.enfermedades).joinedload(PatienteEnfermedad.enfermedad))
         return render_template("manage_patients.html", pacientes = pacientes)
     return redirect(url_for("main_controller.index"))
