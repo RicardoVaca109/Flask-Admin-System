@@ -45,12 +45,61 @@
       h1, h2 {
         color: #f8f9fa;
       }
+      .btn-extra {
+        margin: 5px;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+      .btn-color-visualizar {
+        background-color: #0055fe;
+        color: white;
+      }
+      .btn-color-editar {
+        background-color: #ffff00;
+        color: black;
+      }
+      .btn-color-eliminar {
+        background-color: #e50000;
+        color: white;
+      }
+      .btn-color-add {
+        background-color: #29ba50;
+        color: white;
+      }
     </style>
 </head>
 <body>
   <div class="container">
     <div class="table-container shadow">
       <h2 class="text-light">Pacientes Registrados</h2>
+      
+      <!-- Formulario para crear un paciente -->
+      <form action="{{ url_for('dashboard_controller.create_patient_admin') }}" method="post" class="mt-3">
+        <h3 class="text-light">Añadir Nuevo Paciente</h3>
+        <div class="mb-3">
+          <label for="nombre" class="form-label text-light">Nombre del Paciente</label>
+          <input type="text" class="form-control" id="nombre" name="nombre" required />
+        </div>
+        <div class="mb-3">
+          <label for="apellido" class="form-label text-light">Apellido del Paciente</label>
+          <input type="text" class="form-control" id="apellido" name="apellido" required />
+        </div>
+        <div class="mb-3">
+          <label for="edad" class="form-label text-light">Edad</label>
+          <input type="text" class="form-control" id="edad" name="edad" required />
+        </div>
+        <div class="mb-3">
+          <label for="contacto" class="form-label text-light">Correo</label>
+          <input type="text" class="form-control" id="contacto" name="contacto" required />
+        </div>
+        <div class="form-group">
+          <label for="fecha_registro">Fecha de Registro</label>
+          <input type="date" id="fecha_registro" name="fecha_registro" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-extra btn-color-add">Crear Nuevo Paciente</button>
+      </form>
+
+      <!-- Tabla de pacientes existentes -->
       <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
         <table class="table table-bordered table-hover text-secondary">
           <thead class="table-dark">
@@ -58,8 +107,10 @@
               <th scope="col">ID</th>
               <th scope="col">Nombre</th>
               <th scope="col">Apellido</th>
+              <th scope="col">Edad</th>
               <th scope="col">Contacto</th>
               <th scope="col">Fecha de Registro</th>
+              <th scope="col" style="width: 180px;">Editar</th>
             </tr>
           </thead>
           <tbody>
@@ -68,13 +119,58 @@
               <td>{{ patient.id }}</td>
               <td>{{ patient.nombre }}</td>
               <td>{{ patient.apellido }}</td>
+              <td> {{patient.edad}} </td>
               <td>{{ patient.contacto }}</td>
               <td>{{ patient.fecha_registro }}</td>
-            </tr>
+              <td>
+                <!-- Botón para abrir el modal de edición -->
+                <button class="btn btn-color-editar btn-extra" data-bs-toggle="modal" data-bs-target="#editModal{{ patient.id }}">Editar</button>
+                <!-- Modal de edición -->
+                <div class="modal fade" id="editModal{{ patient.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Editar Paciente: {{ patient.nombre }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ url_for('dashboard_controller.edit_patient_admin', patient_id=patient.id) }}" method="POST">
+                                    <div class="mb-3">
+                                        <label for="nombre" class="form-label">Nombre</label>
+                                        <input type="text" class="form-control" id="nombre" name="nombre" value="{{ patient.nombre }}" required />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="apellido" class="form-label">Apellido</label>
+                                        <input type="text" class="form-control" id="apellido" name="apellido" value="{{ patient.apellido }}" required />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="edad" class="form-label">Edad</label>
+                                        <input type="number" class="form-control" id="edad" name="edad" value="{{ patient.edad }}" required />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="contacto" class="form-label">Correo</label>
+                                        <input type="text" class="form-control" id="contacto" name="contacto" value="{{ patient.contacto }}" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fecha_registro">Fecha de Registro</label>
+                                        <input type="date" id="fecha_registro" name="fecha_registro" class="form-control" value="{{ patient.fecha_registro }}" required>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </td>
+             </tr>
             {% endfor %}
           </tbody>
         </table>
       </div>
+
+      <!-- Botón de regreso al dashboard -->
       <a href="{{ url_for('dashboard_controller.dashboard') }}" class="btn btn-secondary">
         Regresar al Dashboard
       </a>
