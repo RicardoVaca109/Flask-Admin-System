@@ -99,7 +99,7 @@ def reporte_medicina_mas_consumida():
             fecha_inicio=fecha_inicio,
             fecha_fin=fecha_fin
         )
-# reportes entre rango de fechas y sumatoria total de medicinas consumidas por paciente  que este ordenada (en este rango de fechas que pacientes consumieorn mas medicina)
+
     return render_template('reporte_medicina_mas_consumida.html', resultados=[], fecha_inicio=None, fecha_fin=None)
 
 @inventory_controller.route("/prediccion-consumos", methods=['GET', 'POST'])
@@ -160,6 +160,7 @@ def predict_consumos():
 
     return render_template('prediccion_consumos.html', predicciones=[], fecha_inicio=None, fecha_fin=None)
 
+# reportes entre rango de fechas y sumatoria total de medicinas consumidas por paciente  que este ordenada (en este rango de fechas que pacientes consumieorn mas medicina)
 @inventory_controller.route("/reporte-consumo-pacientes", methods=['GET', 'POST'])
 def reporte_consumo_pacientes():
     if request.method == 'POST':
