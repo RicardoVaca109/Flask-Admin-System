@@ -15,6 +15,7 @@ from controllers.dashboard_controller import dashboard_controller
 from controllers.main_controller import main_controller
 from controllers.patients_controller import patients_controller
 from controllers.inventory_controller import inventory_controller
+from controllers.create_medicine_controller import create_medicine_controller
 from models.users_model import User
 
 
@@ -55,6 +56,7 @@ app.register_blueprint(auth_controller)
 app.register_blueprint(dashboard_controller)
 app.register_blueprint(patients_controller)
 app.register_blueprint(inventory_controller)
+app.register_blueprint(create_medicine_controller, url_prefix="/api")
 
 if __name__ == "__main__":
     app.run(debug=True)
